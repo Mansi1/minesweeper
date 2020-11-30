@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+            background: #949494;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cfcfcf;
+            -webkit-border-radius: 1ex;
+            -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: #949494;
+        }
+        #root-frame{
+            border-top: solid 2px #949494;
+            border-left: solid 2px #949494;
+            border-right: solid 2px #cfcfcf;
+            border-bottom: solid 2px #cfcfcf;
+            background-color: #C8BFC7;
+            padding: 30px;
+        }
+        .status-wrapper {
+            font-family: 'mine-number';
+            font-size: 12px;
+            z-index: 3;
+            width: 100%;
+            position: fixed;
+            margin: 20px;
+            pointer-events: none;
+
+        }
+        .status {
+            padding: 20px;
+            width: 200px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            background-color: #c7bfc7;
+            border-top: solid 2px #949494;
+            border-left: solid 2px #949494;
+            border-right: solid 2px #cfcfcf;
+            border-bottom: solid 2px #cfcfcf;
+        }
+
+        html, body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        @font-face {
+            font-family: 'mine-number';
+            src: url(fonts/mine-sweeper.ttf);
+        }
+
+        @font-face {
+            font-family: 'mine-counter';
+            src: url(fonts/mine-counter.ttf);
+        }
+        .block {
+            font-size: 10px;
+            text-align: center;
+            font-family: 'mine-number';
+            background-color: #c7bfc7;
+            width: 19px;
+            height: 19px;
+            line-height: 19px;
+            border-top: 1px solid #877f87;
+            border-left: 1px solid #877f87;
+        }
+
+        .block.covered {
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            border-top: 2px solid #fff;
+            border-left: 2px solid #fff;
+            border-right: 2px solid #877f87;
+            border-bottom: 2px solid #877f87;
+        }
+
+
+        .block.right {
+            width: 18px;
+            border-right: 1px solid #877f87;
+        }
+
+        .block.bottom {
+            height: 18px;
+            border-bottom: 1px solid #877f87;
+        }
+
+        .block.right.covered {
+            width: 16px;
+            border-right: 2px solid #877f87;
+        }
+
+        .block.bottom.covered {
+            height: 16px;
+            border-bottom: 2px solid #877f87;
+        }
+
+        .row {
+            display: flex;
+        }
+
+        #root {
+            border-top: 2px solid #877f87;
+            border-left: 2px solid #877f87;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+
+        .count1 {
+            color: #0000ff;
+        }
+
+        .count2 {
+            color: #007b00;
+        }
+
+        .count3 {
+            color: #ff0000;
+        }
+
+        .count4 {
+            color: #00007b;
+        }
+
+        .count5 {
+            color: #7b0000;
+        }
+
+        .count6 {
+            color: #007b7b;
+        }
+
+        .count7 {
+            color: #000000;
+        }
+
+        .count8 {
+            color: #7b7b7b;
+        }
+
+    </style>
+    <script type="text/javascript" src="src/Block.js"></script>
+    <script type="text/javascript" src="src/FieldMatrix.js"></script>
+</head>
+<body>
+<div class="status-wrapper">
+    <div class="status">
+        <div style="display: flex;">
+            <div style="flex: 1; text-align: left">Mines</div>
+            <div style="flex: 1; text-align: right" id="mines"></div>
+        </div>
+        <div style="display: flex;">
+            <div style="flex: 1; text-align: left">Marker:</div>
+            <div style="flex: 1; text-align: right" id="markers"></div>
+        </div>
+        <div style="display: flex;">
+            <div style="flex: 1; text-align: left">Fields:</div>
+            <div style="flex: 1; text-align: right" id="fields"></div>
+        </div>
+    </div>
+</div>
+
+<div id="root-frame">
+    <div id="root"></div>
+</div>
+<script>
+    new FieldMatrix(200, 200, 0.1);
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^11.0.2"
+  },
+  "scripts": {
+    "start": "electron ."
+  }
+}
