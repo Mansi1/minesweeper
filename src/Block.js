@@ -23,6 +23,7 @@ class Block {
         const el = document.createElement('div');
         el.classList.add('covered');
         el.classList.add('block');
+        el.id = this.index;
         if (this.isRight) {
             el.classList.add('right');
         }
@@ -33,6 +34,9 @@ class Block {
     }
 
     onClick = () => {
+        if(this.isMarked){
+            return
+        }
         if (!this.isRevealed) {
             this.onReveal();
 
@@ -47,9 +51,11 @@ class Block {
         if (!this.isRevealed) {
             this.isRevealed = true;
             this.update();
-
+            if(this.isMine){
+              alert('you lose')
+            }
             if (this.count === 0 && !this.isMine) {
-                this.getNeighbours().forEach(b => {
+                this.getNeighbours().filter(b=> !b.isMine).forEach(b => {
                         b.onReveal()
                     }
                 )
@@ -61,16 +67,23 @@ class Block {
         if (this.isRevealed) {
             this.el.classList.remove('covered');
             if (this.isMine) {
-                this.el.innerText = 'M';
+                this.el.classList.add('mine')
+                this.el.innerText = '';
             }
             if (this.count > 0 && !this.isMine) {
                 this.el.classList.add(`count${this.count}`)
                 this.el.innerText = this.count;
             }
+        }else {
+          this.el.classList.add("covered");
+          if (this.isMarked) {
+            this.el.classList.add('marked')
+          }else{
+            this.el.classList.remove('marked')
+
+          }
         }
-        if (this.isMarked && !this.isRevealed) {
-            this.el.innerText = '?';
-        }
+       
     }
     calculateNeighbours = () => {
         const neighbours = [];
@@ -103,7 +116,7 @@ class Block {
     }
 
     onRightClick = (evt) => {
-        if (evt.button === 2) {
+        if (evt.button === 2 && !this.isRevealed) {
             this.isMarked = !this.isMarked;
             this.update()
         }
