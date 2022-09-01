@@ -168,6 +168,7 @@
     </style>
     <script type="text/javascript" src="src/Block.js"></script>
     <script type="text/javascript" src="src/FieldMatrix.js"></script>
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
 </head>
 <body>
 <div class="status-wrapper">
@@ -199,6 +200,14 @@
 </div>
 <script>
     new FieldMatrix(50, 50, 0.15);
+</script>
+<script>
+    kofiWidgetOverlay.draw('mansi1', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Support me',
+        'floating-chat.donateButton.background-color': '#a3a3a3',
+        'floating-chat.donateButton.text-color': '#fff'
+    });
 </script>
 </body>
 </html>
