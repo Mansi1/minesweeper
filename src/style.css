@@ -1,0 +1,431 @@
+::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+    background: #949494;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cfcfcf;
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+    background: #949494;
+}
+
+body {
+    background-color: #C8BFC7;
+}
+
+#root-frame {
+    background-color: #C8BFC7;
+    margin: auto;
+    padding: 30px;
+}
+
+.status-wrapper {
+    font-family: 'mine-number';
+    font-size: 12px;
+    z-index: 3;
+    width: 100%;
+    /* padding, not margin: a margin collapses through <body> and pushes the 100vh body 20px down, adding a scrollbar */
+    padding-top: 20px;
+    pointer-events: none;
+}
+
+.status {
+    padding: 10px;
+    width: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background-color: #c7bfc7;
+    border-top: solid 2px #949494;
+    border-left: solid 2px #949494;
+    border-right: solid 2px #cfcfcf;
+    border-bottom: solid 2px #cfcfcf;
+}
+
+html, body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+@font-face {
+    font-family: 'mine-number';
+    src: url(../fonts/mine-sweeper.ttf);
+}
+
+@font-face {
+    font-family: 'mine-counter';
+    src: url(../fonts/mine-counter.ttf);
+}
+
+.block {
+    font-size: 10px;
+    text-align: center;
+    font-family: 'mine-number';
+    background-color: #c7bfc7;
+    width: 19px;
+    height: 19px;
+    cursor: crosshair;
+    line-height: 19px;
+    border-top: 1px solid #877f87;
+    border-left: 1px solid #877f87;
+}
+
+.block.covered {
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+    border-right: 2px solid #877f87;
+    border-bottom: 2px solid #877f87;
+}
+
+
+.block.right {
+    width: 18px;
+    border-right: 1px solid #877f87;
+}
+
+.block.bottom {
+    height: 18px;
+    border-bottom: 1px solid #877f87;
+}
+
+.marked {
+    background-image: url("img/flag.svg");
+}
+.mine {
+    background-image: url("img/mine.svg");
+}
+.block.right.covered {
+    width: 16px;
+    border-right: 2px solid #877f87;
+}
+
+.block.bottom.covered {
+    height: 16px;
+    border-bottom: 2px solid #877f87;
+}
+
+.row {
+    display: flex;
+}
+
+#root {
+    border-top: 2px solid #877f87;
+    border-left: 2px solid #877f87;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+}
+
+.count1 {
+    color: #0000ff;
+}
+
+.count2 {
+    color: #007b00;
+}
+
+.count3 {
+    color: #ff0000;
+}
+
+.count4 {
+    color: #00007b;
+}
+
+.count5 {
+    color: #7b0000;
+}
+
+.count6 {
+    color: #007b7b;
+}
+
+.count7 {
+    color: #000000;
+}
+
+.count8 {
+    color: #7b7b7b;
+}
+
+
+#lives {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2px;
+}
+
+/* one heart shape as a mask; the background paints it full, half (left side) or empty */
+.heart {
+    width: 14px;
+    height: 14px;
+    -webkit-mask: url("img/heart.svg") center / contain no-repeat;
+    mask: url("img/heart.svg") center / contain no-repeat;
+    background: #949494;
+}
+
+.heart.full {
+    background: #ff0000;
+}
+
+.heart.half {
+    background: linear-gradient(90deg, #ff0000 50%, #949494 50%);
+}
+
+#root.game-over {
+    pointer-events: none;
+}
+
+.block.hit {
+    background-color: #ff0000;
+}
+
+/* game over: each remaining mine pops in at its own --delay, spreading out from the hit mine */
+.block.boom {
+    position: relative;
+    animation: boom 450ms ease-out var(--delay, 0ms) both;
+}
+
+@keyframes boom {
+    0% {
+        transform: scale(0);
+        background-color: #ffcc00;
+    }
+    60% {
+        transform: scale(1.6);
+        background-color: #ff0000;
+        z-index: 1;
+    }
+    100% {
+        transform: scale(1);
+        background-color: #c7bfc7;
+    }
+}
+
+#root-frame.shake {
+    animation: shake 400ms ease-in-out;
+}
+
+@keyframes shake {
+    20%, 60% {
+        transform: translateX(-6px);
+    }
+    40%, 80% {
+        transform: translateX(6px);
+    }
+}
+
+/* win: a golden wave bounces every cell out from the last click; the flagged mines jump higher */
+.block.cheer {
+    position: relative;
+    animation: cheer 600ms ease-out var(--delay, 0ms) both;
+}
+
+.block.marked.cheer {
+    animation-name: cheer-flag;
+}
+
+@keyframes cheer {
+    40% {
+        transform: scale(1.35);
+        background-color: #ffd700;
+        z-index: 1;
+    }
+    70% {
+        background-color: #7cfc7c;
+    }
+}
+
+@keyframes cheer-flag {
+    40% {
+        transform: translateY(-10px) scale(1.8);
+        background-color: #00c800;
+        z-index: 2;
+    }
+}
+
+#root-frame.won {
+    animation: glow 900ms ease-in-out 3;
+}
+
+@keyframes glow {
+    50% {
+        box-shadow: 0 0 40px 12px #ffd700;
+    }
+}
+
+.confetti {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.confetti i {
+    position: absolute;
+    top: -20px;
+    left: var(--x);
+    width: 8px;
+    height: 14px;
+    animation: confetti var(--fall) cubic-bezier(0.25, 0.6, 0.5, 1) var(--delay) both;
+}
+
+@keyframes confetti {
+    to {
+        transform: translate(var(--drift), 110vh) rotate(var(--spin));
+    }
+}
+
+#end.won h1 {
+    animation: bounce 700ms ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+    to {
+        transform: translateY(-6px) scale(1.08);
+    }
+}
+
+/* the status panel would show the last game's numbers above the level menu */
+body:has(#start[open]) .status-wrapper {
+    visibility: hidden;
+}
+
+/* start and end screens */
+dialog {
+    font-family: 'mine-number';
+    font-size: 12px;
+    text-align: center;
+    min-width: 240px;
+    padding: 20px 28px;
+    background-color: #c7bfc7;
+    border-top: solid 3px #fff;
+    border-left: solid 3px #fff;
+    border-right: solid 3px #877f87;
+    border-bottom: solid 3px #877f87;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+dialog[open] {
+    animation: pop-in 250ms ease-out;
+}
+
+dialog::backdrop {
+    background: rgba(40, 30, 40, 0.45);
+}
+
+@keyframes pop-in {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+dialog h1 {
+    font-size: 24px;
+    margin: 0 0 12px;
+}
+
+#end h1 {
+    color: #ff0000;
+}
+
+#end.won h1 {
+    color: #007b00;
+}
+
+.choices {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+/* restart and new game in the status panel, which otherwise ignores the pointer */
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.actions button {
+    flex: 1;
+    pointer-events: auto;
+}
+
+.choices button, .actions button {
+    font: inherit;
+    color: inherit;
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color: #c7bfc7;
+    border-top: solid 2px #fff;
+    border-left: solid 2px #fff;
+    border-right: solid 2px #877f87;
+    border-bottom: solid 2px #877f87;
+}
+
+.actions button {
+    padding: 6px 4px;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.choices button:hover, .actions button:hover {
+    background-color: #d6cfd6;
+}
+
+.choices button:active, .actions button:active {
+    border-top-color: #877f87;
+    border-left-color: #877f87;
+    border-right-color: #fff;
+    border-bottom-color: #fff;
+}
+
+.choices button:focus-visible, .actions button:focus-visible {
+    outline: 2px solid #00007b;
+    outline-offset: 2px;
+}
+
+.choices small {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+    color: #555;
+}
+
+.hint {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .block.boom, .block.cheer, #root-frame.shake, #root-frame.won, #end.won h1, dialog[open] {
+        animation: none;
+    }
+}
+
+/* the status panel ignores the pointer; its sound toggle must not */
+#sound {
+    pointer-events: auto;
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+#sound:focus-visible {
+    outline: 2px solid #00007b;
+}
