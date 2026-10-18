@@ -134,8 +134,9 @@ test("each revealed mine costs half a heart without ending the game", async ({ p
   await expect(endScreen(page)).not.toBeVisible();
 });
 
+// Mines whose boom is running right now; finished animations with fill "both" still show up in getAnimations().
 const animating = (page: Page) =>
-  page.locator("#root").evaluate((root) => [...root.querySelectorAll(".boom")].filter((e) => e.getAnimations().length > 0).length);
+  page.locator("#root").evaluate((root) => [...root.querySelectorAll(".boom")].filter((e) => e.getAnimations().some((a) => a.playState === "running")).length);
 
 test("the sixth mine ends the game: wave reveals every mine, board locked, then the game over screen", async ({ page }) => {
   await startGame(page);
