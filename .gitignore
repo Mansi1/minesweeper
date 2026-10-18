@@ -1,2 +1,13 @@
 /.idea/
 /node_modules/
+.env
+var/*
+tmp/*
+output/*
+input/*
+.DS_Store
+dist/
+.agents/SWARM_STATUS.yaml
+coverage/
+.cache/
+__pycache__/
